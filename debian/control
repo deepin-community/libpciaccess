@@ -3,12 +3,13 @@ Section: devel
 Priority: optional
 Maintainer: Debian X Strike Force <debian-x@lists.debian.org>
 Build-Depends:
- debhelper-compat (= 12),
+ debhelper-compat (= 13),
  zlib1g-dev,
  xutils-dev (>= 1:7.5),
- pkg-config,
+ meson,
+ pkgconf,
  quilt (>= 0.46-7),
-Standards-Version: 4.5.0
+Standards-Version: 4.6.1
 Vcs-Git: https://salsa.debian.org/xorg-team/lib/libpciaccess.git
 Vcs-Browser: https://salsa.debian.org/xorg-team/lib/libpciaccess
 
@@ -24,7 +25,7 @@ Description: Generic PCI access library for X
  in a platform-independent way.
 
 Package: libpciaccess0-udeb
-XC-Package-Type: udeb
+Package-Type: udeb
 Section: debian-installer
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}
@@ -37,7 +38,11 @@ Section: libdevel
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Multi-Arch: same
-Depends: libpciaccess0 (= ${binary:Version}), ${shlibs:Depends}, ${misc:Depends}
+Depends:
+ ${shlibs:Depends},
+ ${misc:Depends},
+ libpciaccess0 (= ${binary:Version}),
+ zlib1g-dev,
 Description: Generic PCI access library for X - development files
  Provides functionality for X to access the PCI bus and devices
  in a platform-independent way.

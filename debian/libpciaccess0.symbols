@@ -1,4 +1,5 @@
 libpciaccess.so.0 libpciaccess0 #MINVER#
+* Build-Depends-Package: libpciaccess-dev
  pci_device_cfg_read@Base 0
  pci_device_cfg_read_u16@Base 0
  pci_device_cfg_read_u32@Base 0
@@ -9,6 +10,7 @@ libpciaccess.so.0 libpciaccess0 #MINVER#
  pci_device_cfg_write_u32@Base 0
  pci_device_cfg_write_u8@Base 0
  pci_device_close_io@Base 0.11.0
+ pci_device_disable@Base 0.17
  pci_device_enable@Base 0.10.2
  pci_device_find_by_slot@Base 0
  pci_device_get_agp_info@Base 0
@@ -42,6 +44,14 @@ libpciaccess.so.0 libpciaccess0 #MINVER#
  pci_device_vgaarb_set_target@Base 0.10.7
  pci_device_vgaarb_trylock@Base 0.10.7
  pci_device_vgaarb_unlock@Base 0.10.7
+ (arch=hurd-any)pci_device_x86_close_io@Base 0.16
+ (arch=hurd-any)pci_device_x86_open_legacy_io@Base 0.16
+ (arch=hurd-any)pci_device_x86_read16@Base 0.16
+ (arch=hurd-any)pci_device_x86_read32@Base 0.16
+ (arch=hurd-any)pci_device_x86_read8@Base 0.16
+ (arch=hurd-any)pci_device_x86_write16@Base 0.16
+ (arch=hurd-any)pci_device_x86_write32@Base 0.16
+ (arch=hurd-any)pci_device_x86_write8@Base 0.16
  pci_get_strings@Base 0
  pci_id_match_iterator_create@Base 0
  pci_io_read16@Base 0.11.0
@@ -54,5 +64,10 @@ libpciaccess.so.0 libpciaccess0 #MINVER#
  pci_legacy_open_io@Base 0.11.0
  pci_slot_match_iterator_create@Base 0
  pci_system_cleanup@Base 0
+ (arch=kfreebsd-any)pci_system_freebsd_init_dev_mem@Base 0.16
  pci_system_init@Base 0
  pci_system_init_dev_mem@Base 0.10.2
+ (arch=hurd-any)pci_system_x86_destroy@Base 0.16
+ (arch=hurd-any)pci_system_x86_map_dev_mem@Base 0.17
+ (arch=hurd-any)x86_disable_io@Base 0.16
+ (arch=hurd-any)x86_enable_io@Base 0.16
