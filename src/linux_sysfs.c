@@ -336,9 +336,9 @@ pci_device_linux_sysfs_probe( struct pci_device * dev )
 		    dev->regions[i].size = (high_addr
 					    - dev->regions[i].base_addr) + 1;
 
-		    dev->regions[i].is_IO = (flags & 0x01);
-		    dev->regions[i].is_64 = (flags & 0x04);
-		    dev->regions[i].is_prefetchable = (flags & 0x08);
+		    dev->regions[i].is_IO = (flags & 0x01) != 0;
+		    dev->regions[i].is_64 = (flags & 0x04) != 0;
+		    dev->regions[i].is_prefetchable = (flags & 0x08) != 0;
 		}
 	    }
 
@@ -462,7 +462,7 @@ pci_device_linux_sysfs_read( struct pci_device * dev, void * data,
 
 
     while ( temp_size > 0 ) {
-	const ssize_t bytes = pread64( fd, data_bytes, temp_size, offset );
+	const ssize_t bytes = pread( fd, data_bytes, temp_size, offset );
 
 	/* If zero bytes were read, then we assume it's the end of the
 	 * config file.
@@ -522,7 +522,7 @@ pci_device_linux_sysfs_write( struct pci_device * dev, const void * data,
 
 
     while ( temp_size > 0 ) {
-	const ssize_t bytes = pwrite64( fd, data_bytes, temp_size, offset );
+	const ssize_t bytes = pwrite( fd, data_bytes, temp_size, offset );
 
 	/* If zero bytes were written, then we assume it's the end of the
 	 * config file.
@@ -742,7 +742,7 @@ pci_device_linux_sysfs_unmap_range(struct pci_device *dev,
     return err;
 }
 
-static void pci_device_linux_sysfs_enable(struct pci_device *dev)
+static void pci_device_linux_sysfs_set_enable(struct pci_device *dev, int enable)
 {
     char name[256];
     int fd;
@@ -758,8 +758,18 @@ static void pci_device_linux_sysfs_enable(struct pci_device *dev)
     if (fd == -1)
        return;
 
-    write( fd, "1", 1 );
+    write( fd, enable ? "1" : "0" , 1 );
     close(fd);
+}
+
+static void pci_device_linux_sysfs_enable(struct pci_device *dev)
+{
+	return pci_device_linux_sysfs_set_enable(dev, 1);
+}
+
+static void pci_device_linux_sysfs_disable(struct pci_device *dev)
+{
+	return pci_device_linux_sysfs_set_enable(dev, 0);
 }
 
 static int pci_device_linux_sysfs_boot_vga(struct pci_device *dev)
@@ -981,7 +991,7 @@ pci_device_linux_sysfs_map_legacy(struct pci_device *dev, pciaddr_t base,
     int ret=0;
 
     if (map_flags & PCI_DEV_MAP_FLAG_WRITABLE) {
-	flags = O_RDWR; /* O_RDWR != O_WRONLY | O_RDONLY */;
+	flags = O_RDWR; /* O_RDWR != O_WRONLY | O_RDONLY */
 	prot |= PROT_WRITE;
     }
 
@@ -1042,6 +1052,7 @@ static const struct pci_system_methods linux_sysfs_methods = {
 
     .fill_capabilities = pci_fill_capabilities_generic,
     .enable = pci_device_linux_sysfs_enable,
+    .disable = pci_device_linux_sysfs_disable,
     .boot_vga = pci_device_linux_sysfs_boot_vga,
     .has_kernel_driver = pci_device_linux_sysfs_has_kernel_driver,
 
