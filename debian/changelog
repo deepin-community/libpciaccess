@@ -1,3 +1,9 @@
+libpciaccess (0.18.1-2deepin1) unstable; urgency=medium
+
+  * Rebuild with LTO enabled (dpkg vendor feature optimize/lto).
+
+ -- tunaichao <tunaichao@uniontech.com>  Mon, 21 Sep 2026 15:30:26 +0800
+
 libpciaccess (0.18.1-2) experimental; urgency=medium
 
   * control: Add zlib1g-dev to libpciaccess-dev Depends. (Closes:
